@@ -22,6 +22,19 @@ body {
 </style>
 </head>
 
+
 <body>
+  <aduio id="bgm"loop>
+    <scource src="niglet.mp3" type="aduio/mpeg">
+  </aduio>
+  <script>
+    docmuent.body.addEventListener("Click", () =>{
+      const audio = document.getElementById("bgm");
+      aduio.play();
+      
+    }, { once:true });
+                                   
+  </script>
 </body>
 </html>
+
