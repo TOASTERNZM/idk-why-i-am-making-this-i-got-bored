@@ -50,7 +50,7 @@ body {
   text-transform: uppercase;
   user-select: none;
   pointer-events: none;
-  animation: scrollLeft 30s linear infinite, bwFlicker 3s infinite linear; /* slowed down */
+  animation: scrollLeft 30s linear infinite, bwFlicker 3s infinite linear; /* uses updated bwFlicker */
 }
 
 /* Slow horizontal scroll */
@@ -61,12 +61,13 @@ body {
 
 /* Black-and-white flicker effect */
 @keyframes bwFlicker {
-  0% { color: white; text-shadow: 0 0 5px white, 0 0 10px white; }
-  25% { color: #ccc; text-shadow: 0 0 5px #ccc, 0 0 10px #ccc; }
-  50% { color: #999; text-shadow: 0 0 5px #999, 0 0 10px #999; }
-  75% { color: #ccc; text-shadow: 0 0 5px #ccc, 0 0 10px #ccc; }
-  100% { color: white; text-shadow: 0 0 5px white, 0 0 10px white; }
+  0% { color: black; text-shadow: 0 0 5px black, 0 0 10px black; }
+  25% { color: #555; text-shadow: 0 0 5px #555, 0 0 10px #555; }
+  50% { color: white; text-shadow: 0 0 5px white, 0 0 10px white; }
+  75% { color: #555; text-shadow: 0 0 5px #555, 0 0 10px #555; }
+  100% { color: black; text-shadow: 0 0 5px black, 0 0 10px black; }
 }
+
 
 /* Click-to-play text */
 #clickText {
@@ -100,7 +101,7 @@ body {
 
 <!-- Scrolling header -->
 <div id="headerWrapper">
-  <div id="fancyHeader">ITS A NIGG ABUCK  NIGGA BUCK NIGGA BUCK NIGGA BUCK  </div>
+  <div id="fancyHeader">THIS SITE IS A JOKE DO NOT TAKE OFFENCE TO THIS I LOVE BLACK POEPLE </div>
 </div>
 
 <div id="clickText">Click to play</div>
