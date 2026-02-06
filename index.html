@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>testingUpdate3</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,11 +12,11 @@
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
 }
@@ -27,22 +26,83 @@ body {
   background-size: cover;
   cursor: pointer;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: 'Arial', sans-serif;
+}
+
+#fancyHeader {
+  position: absolute;
+  top: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ff00ff;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff;
+  animation: flicker 1.5s infinite;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+}
+
+#clickText {
+  color: white;
+  font-size: 2rem;
+  text-shadow: 0 0 10px black;
+  transition: opacity 1s ease;
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 5px #ff00ff,
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff;
+  }
+  20%, 24%, 55% {
+    opacity: 0.5;
+    text-shadow: none;
+  }
 }
 </style>
 </head>
 
 <body>
 
+
 <audio id="bgm" loop>
-  <source src="niglet.mp3" type="audio/mpeg">
+  <source src="night.mp3" type="audio/mpeg">
 </audio>
 
+
+<div id="fancyHeader">UR A NIGGER COON MONKEY</div>
+
+
+<div id="clickText">Click to play</div>
+
 <script>
-  document.body.addEventListener("click", () => {
-    const audio = document.getElementById("bgm");
+  const body = document.body;
+  const audio = document.getElementById("bgm");
+  const clickText = document.getElementById("clickText");
+
+  body.addEventListener("click", () => {
     audio.play();
+    clickText.style.opacity = 0; 
   }, { once: true });
 </script>
 
