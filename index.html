@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>testingUpdate4</title>
+<title>Rainbow Music Header</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -36,19 +36,25 @@ body {
 #fancyHeader {
   position: absolute;
   top: 20px;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: bold;
-  color: #ff00ff;
   text-transform: uppercase;
-  text-shadow:
-    0 0 5px #ff00ff,
-    0 0 10px #ff00ff,
-    0 0 20px #ff00ff,
-    0 0 40px #ff00ff;
-  animation: flicker 1.5s infinite;
-  pointer-events: none;
-  user-select: none;
   text-align: center;
+  user-select: none;
+  pointer-events: none;
+  color: white;
+  animation: rainbow 3s infinite linear;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
+}
+
+@keyframes rainbow {
+  0% { color: red; text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red; }
+  16% { color: orange; text-shadow: 0 0 10px orange, 0 0 20px orange, 0 0 30px orange; }
+  33% { color: yellow; text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow; }
+  50% { color: green; text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green; }
+  66% { color: blue; text-shadow: 0 0 10px blue, 0 0 20px blue, 0 0 30px blue; }
+  83% { color: violet; text-shadow: 0 0 10px violet, 0 0 20px violet, 0 0 30px violet; }
+  100% { color: red; text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red; }
 }
 
 #clickText {
@@ -64,46 +70,78 @@ body {
   text-align: center;
 }
 
-
-@keyframes flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    opacity: 1;
-    text-shadow:
-      0 0 5px #ff00ff,
-      0 0 10px #ff00ff,
-      0 0 20px #ff00ff,
-      0 0 40px #ff00ff;
-  }
-  20%, 24%, 55% {
-    opacity: 0.5;
-    text-shadow: none;
-  }
+#visualizer {
+  position: absolute;
+  bottom: 50px;
+  width: 80%;
+  height: 100px;
 }
 </style>
 </head>
 
 <body>
 
-
 <audio id="bgm" loop>
-  <source src="niglet.mp3" type="audio/mpeg">
+  <source src="night.mp3" type="audio/mpeg">
 </audio>
 
-
-<div id="fancyHeader">UR A NIGGER COON MONKEY</div>
-
-
+<div id="fancyHeader">NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER  </div>
 <div id="clickText">Click to play</div>
 
-<script>
-  const body = document.body;
-  const audio = document.getElementById("bgm");
-  const clickText = document.getElementById("clickText");
+<canvas id="visualizer"></canvas>
 
-  body.addEventListener("click", () => {
-    audio.play();
-    clickText.style.opacity = 0; 
-  }, { once: true });
+<script>
+const body = document.body;
+const audio = document.getElementById("bgm");
+const clickText = document.getElementById("clickText");
+const canvas = document.getElementById("visualizer");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth * 0.8;
+canvas.height = 100;
+
+let audioCtx, analyser, source, dataArray;
+
+body.addEventListener("click", () => {
+  audio.play();
+
+  clickText.style.opacity = 0;
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  analyser.fftSize = 128;
+
+  const bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+
+  requestAnimationFrame(drawVisualizer);
+}, { once: true });
+
+function drawVisualizer() {
+  requestAnimationFrame(drawVisualizer);
+  analyser.getByteFrequencyData(dataArray);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const barWidth = (canvas.width / dataArray.length) * 2.5;
+  let x = 0;
+
+  for(let i = 0; i < dataArray.length; i++){
+    const barHeight = dataArray[i] / 2;
+    ctx.fillStyle = `hsl(${i * 10}, 100%, 50%)`; 
+    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+    x += barWidth + 1;
+  }
+}
+
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth * 0.8;
+  canvas.height = 100;
+});
 </script>
 
 </body>
