@@ -33,20 +33,33 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-#fancyHeader {
+/* Scrolling rainbow header container */
+#headerWrapper {
   position: absolute;
   top: 20px;
+  width: 100%;
+  overflow: hidden; /* hides text outside the screen */
+}
+
+/* Rainbow scrolling header */
+#fancyHeader {
+  display: inline-block;
+  white-space: nowrap; /* ensures it doesn’t wrap */
   font-size: 3rem;
   font-weight: bold;
   text-transform: uppercase;
-  text-align: center;
   user-select: none;
   pointer-events: none;
-  color: white;
-  animation: rainbow 3s infinite linear;
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
+  animation: scrollLeft 15s linear infinite, rainbow 3s infinite linear;
 }
 
+/* Horizontal scroll animation */
+@keyframes scrollLeft {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Rainbow color animation */
 @keyframes rainbow {
   0% { color: red; text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red; }
   16% { color: orange; text-shadow: 0 0 10px orange, 0 0 20px orange, 0 0 30px orange; }
@@ -85,9 +98,12 @@ body {
   <source src="night.mp3" type="audio/mpeg">
 </audio>
 
-<div id="fancyHeader">NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER  </div>
-<div id="clickText">Click to play</div>
+<!-- Header wrapper for scrolling -->
+<div id="headerWrapper">
+  <div id="fancyHeader">My Cool Header</div>
+</div>
 
+<div id="clickText">Click to play</div>
 <canvas id="visualizer"></canvas>
 
 <script>
@@ -104,7 +120,6 @@ let audioCtx, analyser, source, dataArray;
 
 body.addEventListener("click", () => {
   audio.play();
-
   clickText.style.opacity = 0;
 
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -136,7 +151,6 @@ function drawVisualizer() {
     x += barWidth + 1;
   }
 }
-
 
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth * 0.8;
