@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>tessting 1</title>
+<title>Testing 1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -33,7 +33,7 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-
+/* Header wrapper for scrolling */
 #headerWrapper {
   position: absolute;
   top: 20px;
@@ -41,39 +41,38 @@ body {
   overflow: hidden;
 }
 
-
+/* Scrolling header */
 #fancyHeader {
   display: inline-block;
   white-space: nowrap; 
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: bold;
   text-transform: uppercase;
   user-select: none;
   pointer-events: none;
-  animation: scrollLeft 15s linear infinite, rainbow 3s infinite linear;
+  animation: scrollLeft 30s linear infinite, bwFlicker 3s infinite linear; /* slowed down */
 }
 
-
+/* Slow horizontal scroll */
 @keyframes scrollLeft {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
 
-
-@keyframes rainbow {
-  0% { color: white; text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white; }
-  16% { color: #ccc; text-shadow: 0 0 10px #ccc, 0 0 20px #ccc, 0 0 30px #ccc; }
-  33% { color: #999; text-shadow: 0 0 10px #999, 0 0 20px #999, 0 0 30px #999; }
-  50% { color: #666; text-shadow: 0 0 10px #666, 0 0 20px #666, 0 0 30px #666; }
-  66% { color: #333; text-shadow: 0 0 10px #333, 0 0 20px #333, 0 0 30px #333; }
-  83% { color: #ccc; text-shadow: 0 0 10px #ccc, 0 0 20px #ccc, 0 0 30px #ccc; }
-  100% { color: white; text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white; }
+/* Black-and-white flicker effect */
+@keyframes bwFlicker {
+  0% { color: white; text-shadow: 0 0 5px white, 0 0 10px white; }
+  25% { color: #ccc; text-shadow: 0 0 5px #ccc, 0 0 10px #ccc; }
+  50% { color: #999; text-shadow: 0 0 5px #999, 0 0 10px #999; }
+  75% { color: #ccc; text-shadow: 0 0 5px #ccc, 0 0 10px #ccc; }
+  100% { color: white; text-shadow: 0 0 5px white, 0 0 10px white; }
 }
 
+/* Click-to-play text */
 #clickText {
   color: white;
-  font-size: 2rem;
-  text-shadow: 0 0 10px black;
+  font-size: 1.8rem;
+  text-shadow: 0 0 5px black;
   transition: opacity 1s ease;
   pointer-events: none;
   user-select: none;
@@ -83,11 +82,12 @@ body {
   text-align: center;
 }
 
+/* Audio visualizer */
 #visualizer {
-  position: absolute;
-  bottom: 50px;
-  width: 80%;
-  height: 100px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* smaller than before */
 }
 </style>
 </head>
@@ -98,9 +98,9 @@ body {
   <source src="niglet.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Header wrapper for scrolling -->
+<!-- Scrolling header -->
 <div id="headerWrapper">
-  <div id="fancyHeader">NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER N NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER  r</div>
+  <div id="fancyHeader">NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGERNIGGER NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER </div>
 </div>
 
 <div id="clickText">Click to play</div>
@@ -113,8 +113,8 @@ const clickText = document.getElementById("clickText");
 const canvas = document.getElementById("visualizer");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth * 0.8;
-canvas.height = 100;
+canvas.width = window.innerWidth;
+canvas.height = 60; // matches CSS height
 
 let audioCtx, analyser, source, dataArray;
 
@@ -127,7 +127,7 @@ body.addEventListener("click", () => {
   source = audioCtx.createMediaElementSource(audio);
   source.connect(analyser);
   analyser.connect(audioCtx.destination);
-  analyser.fftSize = 128;
+  analyser.fftSize = 64; // smaller for smoother bars
 
   const bufferLength = analyser.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
@@ -135,26 +135,29 @@ body.addEventListener("click", () => {
   requestAnimationFrame(drawVisualizer);
 }, { once: true });
 
+// Draw smooth black-and-white bars
 function drawVisualizer() {
   requestAnimationFrame(drawVisualizer);
   analyser.getByteFrequencyData(dataArray);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const barWidth = (canvas.width / dataArray.length) * 2.5;
+  const barWidth = (canvas.width / dataArray.length) * 1.5; // smaller bars
   let x = 0;
 
   for(let i = 0; i < dataArray.length; i++){
     const barHeight = dataArray[i] / 2;
-    ctx.fillStyle = `hsl(${i * 10}, 100%, 50%)`; 
+    const gray = Math.floor(barHeight / 2 + 128); // black-to-white
+    ctx.fillStyle = `rgb(${gray},${gray},${gray})`; 
     ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
     x += barWidth + 1;
   }
 }
 
+// Resize canvas on window resize
 window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth * 0.8;
-  canvas.height = 100;
+  canvas.width = window.innerWidth;
+  canvas.height = 60;
 });
 </script>
 
